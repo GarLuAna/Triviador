@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triviador</title>
+
+</head>
+<body>
+    <div class="pregunta"></div>
+    <button onclick="jugar(nivel)">Jugar</button>
+    <script>
+        var nivel = 0;
+        let respCorrec;
+        const cuestionario = [
+            {
+                "categoría" : "Geografía",
+                "nivel": "2",
+                "pregunta": "¿Cuál es el gentilicio de alguien de Austria?",
+                "respuesta": "Austríaco",                
+                "opciones": ["Austríaco", "Australiano", "Austríano", "El de Austria"]
+            },
+            {
+                "categoría" : "Matemática",
+                "nivel": "0",
+                "pregunta": "¿Cuánto es 2+2?",
+                "respuesta": "4",                
+                "opciones": ["4", "5","3","7"]
+            },
+            {
+                "categoría" : "Geografía",
+                "nivel" : "1",
+                "pregunta": "¿En qué continente se encuentra Albania?",
+                "respuesta": "Europa",
+                "opciones": ["Europa", "Asia", "América", "Oceania"]
+            },
+            {
+                "categoría" : "Lengua",
+                "nivel" : "0",
+                "pregunta": "¿Quién escribió el Quijote?",
+                "respuesta": "Cervantes",
+                "opciones": ["Garcia Marquez", "Cervantes", "Coehlo", "Neruda"]
+            }
+        ];
+
+        const printHTMLPregunta = (i) =>{
+            const c = cuestionario.find(op => op.nivel==i);
+            let r = c.opciones;          
+            respCorrec = c.respuesta;
+            r = r.sort((a,b) => Math.floor(Math.random() * 3) -1);
+            const htmlRespVector = r.map(currentR => `<p><button onClick="evalResp('${currentR}')">O</button>${currentR}</p>`)
+            const htmlRespuestas = htmlRespVector.join(' ');
+            let htmlPreguntaCode = `<p>${c.pregunta}</p><div>${htmlRespuestas}</div>`;            
+            document.querySelector('.pregunta').innerHTML = htmlPreguntaCode;
+        }
+
+
+        const evalResp = respuesta => {
+            if (respuesta==respCorrec){
+                alert("¡¡Iupi acertaste!!")
+                nivel++;
+            }else{
+                alert("Nop nop, esa no es")
+            };
+        };
+
+        const jugar = (i) => {
+            printHTMLPregunta(i)
+          };
+
+    </script>
+</body>
+
+</html>
