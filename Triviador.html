@@ -7,12 +7,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Triviador</title>
 
+    <link rel="stylesheet" href="master.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
 </head>
 <body>
-    <div class="pregunta"></div>
-    <button onclick="jugar(nivel)">Jugar</button>
+    <div id="main">
+        <header>
+            <h1>
+                <span class="material-icons">star</span>Triviador<span class="material-icons">star</span>
+            </h1>
+            <p>Presione para comenzar</p>
+        </header>
 
-    <script src="./Triv.js">
+        <div id="intro" class="section hidden">
+            <b>Bienvenido!</b> 
+            <p>Para comenzar con el juego de preguntas y respuestas ingrese su nombre</p>
+            <input id="inp-name" type="text" value="" placeholder="Nombre" style="border-radius: 5px; border:none; padding: 7px 10px;">
+            <button id="btn-iniciar" onclick="jugar(0)">JUGAR</button>
+        </div>
+        
+        <div id="preguntas" class="section hidden">
+            <div id="pregunta">
+                           
+            </div>   
+            <div id="respuestas">
+                <button id="op1" class="btn-op" onclick="evalResp(this.innerHTML)"></button>
+                <button id="op2" class="btn-op" onclick="evalResp(this.innerHTML)"></button>
+                <button id="op3" class="btn-op" onclick="evalResp(this.innerHTML)"></button>
+                <button id="op4" class="btn-op" onclick="evalResp(this.innerHTML)"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./App.js">
+        
     </script>
 </body>
 

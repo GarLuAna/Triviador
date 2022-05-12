@@ -1,9 +1,50 @@
+const HEADER = document.querySelector('header');
+const INTRO = document.getElementById('intro');
+const PREGUNTAS = document.getElementById('preguntas');
+
+var enJuego = false;
+var player = "";
 var nivel = 0;
+var nivel = 0;
+let pregSeleccionada;
+let pregSelect;
 let respCorrec;
 let partida = {
-    "ronda" : nivel,
-    "premios" : 0
-    };
+    "ronda": nivel,
+    "premios": 0
+};
+
+HEADER.addEventListener('click', renderIntro);
+
+function renderIntro() {
+    const HEADER = document.querySelector('header');
+    const INTRO = document.getElementById('intro');
+    INTRO.classList.remove('hidden');
+
+    HEADER.style.cursor = 'default';
+    HEADER.lastElementChild.setAttribute('hidden', 'hidden');
+    HEADER.removeEventListener('click', renderIntro);
+}
+
+const BTN_INCIAR = document.getElementById('btn-iniciar');
+BTN_INCIAR.addEventListener('click', () => {
+    const NAME = document.getElementById('inp-name');
+    const HEADER_P = document.querySelector('header p');
+
+    if (NAME.value == null || NAME.value.trim().length == 0) {
+        alert("Debe ingresar un nombre para continuar!");
+        return false;
+    }
+
+    player = NAME.value;
+    HEADER_P.innerHTML = `Player ${player}`;
+    HEADER_P.removeAttribute('hidden');
+
+    INTRO.classList.add('hidden');
+    PREGUNTAS.classList.remove('hidden');
+    return true;
+});
+
 
 const cuestionario = [
     [/*Nivel 1*/
@@ -196,8 +237,8 @@ const cuestionario = [
 const seleccionarPregunta = (i) => {
     preguntasPorNivel = cuestionario[i];
     seleccion = (Math.floor(0 + (Math.random() * (preguntasPorNivel.length))));
-    pregSelec = preguntasPorNivel[seleccion];
-    return pregSelec;
+    pregSeleccionada = preguntasPorNivel[seleccion];
+    return pregSeleccionada;
 }
 
 const printHTMLPregunta = (i) => {
@@ -205,31 +246,47 @@ const printHTMLPregunta = (i) => {
     let ops = pregSelect.opciones;
     respCorrec = pregSelect.respuesta;
     ops = ops.sort((a, b) => Math.floor(Math.random() * ops.length) - 1);
-    const htmlRespVector = ops.map(currentR => `<p><button onClick="evalResp('${currentR}')">O</button>${currentR}</p>`)
-    const htmlRespuestas = htmlRespVector.join(' ');
-    let htmlPreguntaCode = `<p>${pregSelect.pregunta}</p><div>${htmlRespuestas}</div>`;
-    document.querySelector('.pregunta').innerHTML = htmlPreguntaCode;
+    let htmlPreguntaCode = `<b><p>${pregSelect.pregunta}</p></b>`;
+    document.getElementById('pregunta').innerHTML = htmlPreguntaCode;
+    respuestas(ops);
 };
 
+function respuestas(r) {
+    document.getElementById('op1').innerHTML = r[0];
+    document.getElementById('op2').innerHTML = r[1];
+    document.getElementById('op3').innerHTML = r[2];
+    document.getElementById('op4').innerHTML = r[3];
+};
 
-const evalResp = respuesta => {
+function evalResp(respuesta) {
+    const HEADER_P = document.querySelector('header p');
     if (respuesta == respCorrec) {
-        alert("¡¡Iupi acertaste!!")
         nivel++;
-        partida.premios = partida.premios + pregSelec.premio;
+        partida.premios = partida.premios + pregSeleccionada.premio;
         if (nivel < (cuestionario.length)) {
-            printHTMLPregunta(nivel);
+            jugar(nivel);
         } else {
-            alert("SE TERMINO");
-            console.log(partida.premios);
+            alert("SE TERMINO LA PARTIDA");
+            PREGUNTAS.classList.add('hidden');
+            HEADER_P.innerHTML = `<b><p>FELICITACIONES ${player}!!</p>
+            <p>Tu puntaje es ${partida.premios}</p></b>`;
         };
     } else {
         alert("SE TERMINO TU PARTIDA");
         nivel = 5;
+        partida.premios = 0;
+        PREGUNTAS.classList.add('hidden');
+        HEADER_P.innerHTML = `<b><h2>¡HAS PERDIDO!</h2></b>`;
+        volverAJugar();
     };
 };
 
-const jugar = (i) => {
+function volverAJugar() {
+    INTRO.classList.add('hidden');
+
+};
+
+function jugar(i) {
     printHTMLPregunta(i);
 };
 
